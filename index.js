@@ -112,5 +112,10 @@ Bee.xflower = function(task, ext){
  * @return {object}
  */
 function mix(){
-    // mix objects.
+    var args = Array.prototype.slice.call(arguments);
+    var base = args[0] || {};
+    for (var i=1; i<args.length; i++) {
+        Object.assign(base, args[i]);
+    }
+    return base;
 }

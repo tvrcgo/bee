@@ -20,7 +20,7 @@ var bee = Bee({
 data(function(data){
     // Store data with default keys.
     bee.store(data);
-    // Or Store data with specific keys.
+    // Or store data with specific keys.
     bee.store(data, ['title', 'url']);
 
     // ...
