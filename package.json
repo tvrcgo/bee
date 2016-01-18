@@ -1,0 +1,19 @@
+{
+  "name": "bee",
+  "version": "1.0.0",
+  "description": "working bees.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tvrcgo/Bee.git"
+  },
+  "author": "tvrcgo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tvrcgo/Bee/issues"
+  },
+  "homepage": "https://github.com/tvrcgo/Bee#readme"
+}
