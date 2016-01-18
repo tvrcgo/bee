@@ -18,8 +18,10 @@ var bee = Bee({
 
 // in worker
 data(function(data){
-    // Store data.
+    // Store data with default keys.
     bee.store(data);
+    // Or Store data with specific keys.
+    bee.store(data, ['title', 'url']);
 
     // ...
 ```
@@ -27,7 +29,7 @@ data(function(data){
 ### honey
 ```js
 // Assign single.
-bee.honey('title', function(data){
+bee.honey('title', function(title){
     return 'hello bee!';
 })
 
@@ -35,9 +37,9 @@ bee.honey('title', function(data){
 bee.honey({
     title: data.mainTitle,
     originalUrl: data.url,
-    category: function(data){
-        // process data.
-        return data;
+    category: function(cat){
+        // process category.
+        return cat;
     }
 })
 ```

@@ -36,15 +36,15 @@ Bee.prototype.honey = function(key, fn) {
     if (key && typeof key === 'object') {
         Object.keys(key).forEach(function(k){
             var tar = key[k];
-            this.honey[k] = typeof tar === 'function' ? tar.call(this, this.honey[k]) : tar;
+            this.honey[k] = typeof tar === 'function' ? tar.call(this, this.honey[k]) : tar||'';
         }.bind(this));
         return this;
     }
     key = key || '_';
-    this.honey[key] = fn && fn.call(this, this.honey[key], function(data){
+    this.honey[key] = typeof fn === 'function' ? fn.call(this, this.honey[key], function(data){
         this.honey[key] = data;
         return data;
-    }.bind(this));
+    }.bind(this)) : fn||'';
     return this;
 }
 
