@@ -15,20 +15,13 @@ var bee = Bee({
     author: 'username',
     tag: 'i-xx-news'
 });
-
-// in worker
-data(function(data){
-    // Store data with default keys.
-    bee.store(data);
-    // Or store data with specific keys.
-    bee.store(data, ['title', 'url']);
-
-    // ...
 ```
 
 ### honey
 ```js
 // Assign single.
+bee.honey('title', 'hello bee!');
+
 bee.honey('title', function(title){
     return 'hello bee!';
 })

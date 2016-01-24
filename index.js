@@ -12,24 +12,12 @@ function Bee(opt){
     this.flower = [];
     this.extend = [];
     this.honey = {};
+    this.harvest = [];
 }
 
 /**
- * 存数据
- * @param data
- * @param select
- */
-Bee.prototype.store = function(data, select){
-    var keys = select || ['title', 'originalUrl', 'keywords', 'summary', 'coverPic'];
-    Object.keys(keys).forEach(function(key){
-        this.honey[key] = data[key] || '';
-    }.bind(this));
-    return this;
-}
-
-/**
- * 扩展 honey
- * @param  {[string, object]}   key
+ * 存 honey 信息
+ * @param  {string|object}   key
  * @param  {function} fn
  */
 Bee.prototype.honey = function(key, fn) {
@@ -49,7 +37,7 @@ Bee.prototype.honey = function(key, fn) {
 }
 
 /**
- * 存 flower
+ * 存 flower 信息
  * @param  {string} url
  * @param  {object} data
  */
@@ -62,7 +50,7 @@ Bee.prototype.flower = function(url, data) {
 }
 
 /**
- * 存 honey extend
+ * 存 honey extend 信息
  * @param  {string} url
  * @param  {object|array} data
  */
@@ -75,17 +63,39 @@ Bee.prototype.extend = function(url, data){
 }
 
 /**
+ * 将 harvest 信息保存并重置，目的是可添加多个 harvest
+ */
+Bee.prototype.harvest = function() {
+    this.harvest.push({
+        honey: this.honey,
+        flower: this.flower,
+        extend: this.extend
+    });
+    this.honey = {};
+    this.flower = [];
+    this.extend = [];
+    return this;
+}
+
+/**
  * 处理完成
  * @param  {object} task
  * @param  {object} ctx
  */
 Bee.prototype.done = function(task, ctx){
-    task.harvest = mix(this.opt, {
-        // author, bid, tag
-        flower: this.flower,
-        honey: this.honey,
-        extend: this.extend
-    });
+    if (this.harvest.length) {
+        task.harvest = this.harvest.map(function(harv){
+            return mix({}, this.opt, harv);
+        });
+    }
+    else {
+        task.harvest = mix({}, this.opt, {
+            // author, bid, tag
+            flower: this.flower,
+            honey: this.honey,
+            extend: this.extend
+        });
+    }
     return task.done(null, task);
 }
 
