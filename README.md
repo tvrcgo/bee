@@ -12,8 +12,8 @@ var Bee = require('bee');
 
 var bee = Bee({
     bid: 'i-xx',
-    author: 'username',
-    tag: 'i-xx-news'
+    tag: 'i-xx-news',
+    author: 'username'
 });
 ```
 
@@ -21,7 +21,6 @@ var bee = Bee({
 ```js
 // Assign single.
 bee.honey('title', 'hello bee!');
-
 bee.honey('title', function(title){
     return 'hello bee!';
 })
@@ -54,12 +53,17 @@ bee.flower(url);
 bee.flower(url, {
     topic: 'xxx'
 })
-// Feed flower with task.data .
-bee.flower(url, bee.xflower(task));
+// Feed flower with task.data.
+bee.flower(url, Bee.xflower(task));
 // Feed flower with task.data and extends.
-bee.flower(url, bee.xflower(task, {
+bee.flower(url, Bee.xflower(task, {
     tags: 'xxx'
 }))
+```
+
+### harvest
+```js
+bee.harvest();
 ```
 
 ### done

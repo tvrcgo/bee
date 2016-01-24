@@ -66,6 +66,8 @@ Bee.prototype.extend = function(url, data){
  * 将 harvest 信息保存并重置，目的是可添加多个 harvest
  */
 Bee.prototype.harvest = function() {
+    validate(this.honey);
+    validate(this.extend);
     this.harvest.push({
         honey: this.honey,
         flower: this.flower,
@@ -89,6 +91,8 @@ Bee.prototype.done = function(task, ctx){
         });
     }
     else {
+        validate(this.honey);
+        validate(this.extend);
         task.harvest = mix({}, this.opt, {
             // author, bid, tag
             flower: this.flower,
@@ -118,6 +122,68 @@ Bee.xflower = function(task, ext){
 }
 
 /**
+ * 验证数据完整性
+ * @param tar
+ */
+function validate(tar) {
+    // extend
+    if (tar && isArray(tar)) {
+        tar.forEach(function(obj){
+            if (obj.url && obj.data && isArray(obj.data)) {
+                obj.data.forEach(function(f){
+                    if (!f.xtype) {
+                        error('extend 对象缺 xtype');
+                    }
+                    switch (f.xtype) {
+                        case 'pushRules':
+                            if (!f.list) {
+                                error('pushRules 缺 list 参数.');
+                            }
+                            break;
+                        case 'category':
+                            if (!(f.categoryFirst || f.categorySecond)) {
+                                error('category 分类未指定.')
+                            }
+                            break;
+                        case 'tags':
+                            if (!(f.tag)) {
+                                error('tags 缺 tag 参数.')
+                            }
+                            break;
+                        case 'dailyhunt':
+                        case 'extra':
+                            break;
+                        default:
+                            error('未定义的xtype.')
+                    }
+                })
+            }
+        })
+    }
+    // honey
+    if (tar && typeof tar === 'object') {
+        ;['bid', 'originalUrl', 'title', 'coverPic', 'pages', 'country', 'language', 'belongSeed', 'belongSite'].forEach(function(key){
+            var val = tar[key];
+            // required keys.
+            if (val === null || val === undefined) {
+                error('字段 '+ key +' 缺少.');
+            }
+            // pages
+            if (key==='pages') {
+                if (!isArray(val)) {
+                    error('pages 必须是数组.');
+                }
+                val.forEach(function(p){
+                    if (!(p.belongPage && p.content)) {
+                        error('pages 的对象缺 belongPage 或 content.');
+                    }
+                })
+            }
+        });
+    }
+}
+
+/**
  * 合并对象
  * @return {object}
  */
@@ -128,4 +194,18 @@ function mix(){
         Object.assign(base, args[i]);
     }
     return base;
+}
+
+/**
+ * 是否为数组
+ * @param  {*}  obj
+ * @return {Boolean}
+ */
+function isArray(obj) {
+    return ojb && '[object Array]' === toString.call(obj);
+}
+
+
+function error(msg) {
+    throw new Error(msg);
 }
