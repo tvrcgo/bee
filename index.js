@@ -64,15 +64,16 @@ Bee.prototype.extend = function(url, data){
 
 /**
  * 将 harvest 信息保存并重置，目的是可添加多个 harvest
+ * @param opts
  */
-Bee.prototype.harvest = function() {
+Bee.prototype.harvest = function(opts) {
     validate(this.honey);
     validate(this.extend);
-    this.harvest.push({
+    this.harvest.push(mix({
         honey: this.honey,
         flower: this.flower,
         extend: this.extend
-    });
+    }, opts||{}));
     this.honey = {};
     this.flower = [];
     this.extend = [];
@@ -191,7 +192,15 @@ function mix(){
     var args = Array.prototype.slice.call(arguments);
     var base = args[0] || {};
     for (var i=1; i<args.length; i++) {
-        Object.assign(base, args[i]);
+        if (Object.assign) {
+            Object.assign(base, args[i]);
+        }
+        else {
+            var tar = args[i];
+            Object.keys(tar).forEach(function(k){
+                base[k] = tar[k];
+            });
+        }
     }
     return base;
 }

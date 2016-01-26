@@ -63,7 +63,9 @@ bee.flower(url, Bee.xflower(task, {
 
 ### harvest
 ```js
-bee.harvest();
+bee.harvest({
+    url: 'harvest.url' // 一次返回多个 harvest 时，为每个 harvest 单独设置 url。[可选]
+});
 ```
 
 ### done
