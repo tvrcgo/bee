@@ -8,11 +8,15 @@ function Bee(opt){
     if (!(this instanceof Bee)) {
         return new Bee(opt);
     }
+    // options
     this.opt = opt || {};
-    this.flower = [];
-    this.extend = [];
-    this.honey = {};
-    this.harvest = [];
+    // task
+    this.t = {
+        flower: [],
+        extend: [],
+        honey: {},
+        harvest: []
+    };
 }
 
 /**
@@ -24,13 +28,13 @@ Bee.prototype.honey = function(key, fn) {
     if (key && typeof key === 'object') {
         Object.keys(key).forEach(function(k){
             var tar = key[k];
-            this.honey[k] = typeof tar === 'function' ? tar.call(this, this.honey[k]) : tar||'';
+            this.t.honey[k] = typeof tar === 'function' ? tar.call(this, this.t.honey[k]) : tar||'';
         }.bind(this));
         return this;
     }
     key = key || '_';
-    this.honey[key] = typeof fn === 'function' ? fn.call(this, this.honey[key], function(data){
-        this.honey[key] = data;
+    this.t.honey[key] = typeof fn === 'function' ? fn.call(this, this.t.honey[key], function(data){
+        this.t.honey[key] = data;
         return data;
     }.bind(this)) : fn||'';
     return this;
@@ -42,7 +46,7 @@ Bee.prototype.honey = function(key, fn) {
  * @param  {object} data
  */
 Bee.prototype.flower = function(url, data) {
-    this.flower.push({
+    this.t.flower.push({
         url: url,
         data: data;
     });
@@ -55,7 +59,7 @@ Bee.prototype.flower = function(url, data) {
  * @param  {object|array} data
  */
 Bee.prototype.extend = function(url, data){
-    this.extend.push({
+    this.t.extend.push({
         url: url,
         data: [].concat(data);
     })
@@ -67,16 +71,16 @@ Bee.prototype.extend = function(url, data){
  * @param opts
  */
 Bee.prototype.harvest = function(opts) {
-    validate(this.honey);
-    validate(this.extend);
-    this.harvest.push(mix({
-        honey: this.honey,
-        flower: this.flower,
-        extend: this.extend
+    validate(this.t.honey);
+    validate(this.t.extend);
+    this.t.harvest.push(mix({
+        honey: this.t.honey,
+        flower: this.t.flower,
+        extend: this.t.extend
     }, opts||{}));
-    this.honey = {};
-    this.flower = [];
-    this.extend = [];
+    this.t.honey = {};
+    this.t.flower = [];
+    this.t.extend = [];
     return this;
 }
 
@@ -86,19 +90,18 @@ Bee.prototype.harvest = function(opts) {
  * @param  {object} ctx
  */
 Bee.prototype.done = function(task, ctx){
-    if (this.harvest.length) {
-        task.harvest = this.harvest.map(function(harv){
+    if (this.t.harvest.length) {
+        task.harvest = this.t.harvest.map(function(harv){
             return mix({}, this.opt, harv);
         });
     }
     else {
-        validate(this.honey);
-        validate(this.extend);
+        validate(this.t.honey);
+        validate(this.t.extend);
         task.harvest = mix({}, this.opt, {
-            // author, bid, tag
-            flower: this.flower,
-            honey: this.honey,
-            extend: this.extend
+            flower: this.t.flower,
+            honey: this.t.honey,
+            extend: this.t.extend
         });
     }
     return task.done(null, task);

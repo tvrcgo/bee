@@ -11,7 +11,6 @@ npm i tvrcgo/bee
 var Bee = require('bee');
 
 var bee = Bee({
-    bid: 'i-xx',
     tag: 'i-xx-news',
     author: 'username'
 });

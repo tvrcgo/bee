@@ -9,76 +9,38 @@
 #### 必填
 - `title` 标题
 - `originalUrl` 原文地址
+- `language` 语言
+- `country` 国家
+- `city` 城市
 - `coverPic` 封面图
 - `pages` 正文内容
 - `totalPage` 正文总页数
-- `country` 国家
-- `language` 语言
 - `sourcePublishTime` 源站发布时间戳
-- `belongSeed` 种子源URL
 - `belongSite` 种子站点
 
 #### 选填
 - `articleFrom` 文章来源（作者）
 
+## Flower
+```js
+[{
+    url: 'http://example.com',
+    data: {
+        // 自定义
+    }
+}]
+```
+
 ## Extend
-增量更新信息。
+增量信息。
 
-#### category
-层级分类
 ```js
-{
-    xtype: 'category',
-    categoryFirst: '一级分类名',
-    categorySecond: '二级分类名'
-}
-```
-
-#### tag
-内容标签
-```js
-{
-    xtype: 'tag',
-    type: 'site|custom',
-    tag: '标签名'
-}
-```
-
-#### topic
-专题信息
-```js
-{
-    xtype: 'topic',
-    topic: '专题名称',
-    belongTopic: '归属专题名称'
-}
-```
-
-#### relate
-相关新闻
-```js
-{
-    xtype: 'relate',
-    originalUrl: '相关新闻源文URL'
-}
-```
-
-#### publish
-对应发布到 NAPI 列表
-```js
-{
-    xtype: 'publish',
-    list: 'headlines'
-}
-```
-
-#### extra
-其它信息
-```js
-{
-    xtype: 'extra',
-    isRelated: true // 是否被关联
-}
+[{
+    url: 'http://example.com/story/123',
+    data: [{
+        seedName: 'bhaskar-politics' // 种子名称
+    }]
+}]
 ```
 
 &copy; Intlnews 2016
