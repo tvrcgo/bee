@@ -1,77 +1,84 @@
 # Bee
 变态的小蜜蜂
 
+简化 worker 脚本开发
+
 ## Install
 ```
 npm i tvrcgo/bee
 ```
 
 ## Usage
+实例化 bee 对象
 ```js
 var Bee = require('bee');
 
-var bee = Bee({
-    tag: 'i-xx-news',
+var bee = Bee(task, {
+    tag: 'xxx',
     author: 'username'
 });
 ```
 
 ### honey
+保存 honey
 ```js
-// Assign single.
+// 单个值.
 bee.honey('title', 'hello bee!');
 bee.honey('title', function(title){
     return 'hello bee!';
 })
 
-// Assign many.
+// 多个值的对象.
 bee.honey({
-    title: data.mainTitle,
+    title: data.title,
     originalUrl: data.url,
-    category: function(cat){
-        // process category.
-        return cat;
+    coverPic: function(picUrl){
+        // process picUrl.
+        return picUrl;
     }
 })
 ```
 
 ### honey extend
+保存 honey extend
 ```js
-// Feed honey extend.
+// 保存 extend 信息
 bee.extend(url, {
-    xtype: 'tags',
-    list: 'headlines'
+    seedName: 'bhaskar-politics'
 })
 ```
 
 ### flower
+保存 flower
 ```js
-// Feed flower.
+// 保存 flower.
 bee.flower(url);
-// Feed flower with data.
+// 保存 flower 并附带信息.
 bee.flower(url, {
     topic: 'xxx'
 })
-// Feed flower with task.data.
-bee.flower(url, Bee.xflower(task));
-// Feed flower with task.data and extends.
-bee.flower(url, Bee.xflower(task, {
-    tags: 'xxx'
-}))
+
+// flower data.
+bee.data;
+// 把当前任务的 data 通过 flower 往下传递
+bee.flower(url, _.extend({
+    topic: 'xxx'
+}, bee.data))
 ```
 
 ### harvest
+保存一个 harvest，适用于一次需要返回多个 harvest 的情况。
 ```js
 bee.harvest({
-    url: 'harvest.url' // 一次返回多个 harvest 时，为每个 harvest 单独设置 url。[可选]
+    url: 'harvest url' // 为每个 harvest 单独设置 url。[可选]
 });
 ```
 
 ### done
+任务完成
 ```js
-// in worker.
 .done(function(ctx){
-    bee.done(task);
+    bee.done();
 })
 ```
 
